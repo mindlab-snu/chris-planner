@@ -15,7 +15,7 @@ window.FIREBASE_CONFIG = {
   messagingSenderId: "972544808162",
   appId: "1:972544808162:web:66c42f54a93ec10e8cfabb"
 };
-window.PAGE_PASSWORD = "1226";   // 빈 문자열이면 비밀번호 없이 열림
+window.PAGE_PASSWORD = "";   // 빈 문자열이면 비밀번호 없이 열림
 </script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -29,7 +29,7 @@ window.PAGE_PASSWORD = "1226";   // 빈 문자열이면 비밀번호 없이 열�
   --bg:#f6f7f4; --panel:#ffffff; --fg:#1b2430; --muted:#66707d; --line:#dfe3e8; --line2:#eef0f3;
   --accent:#0f6e8c; --accent-soft:#dcedf2; --pool:#1f9fb8; --pool-soft:#d6f0f4;
   --exam:#b6471c; --exam-soft:#f8e3d8; --off:#8a7f6a; --off-soft:#efe9dc;
-  --ok:#2f8a4b; --ok-soft:#dcefe1; --study:#5b4ea8; --study-soft:#e6e2f5; --hover:#f0eefa;
+  --ok:#2f8a4b; --ok-soft:#dcefe1; --study:#5b4ea8; --study-soft:#e6e2f5; --hover:#f0eefa; --quiz:#b5177a; --quiz-soft:#fbe0ef; --rest:#b07d1a; --rest-soft:#fbefd2; --cards:#4b5a8a; --cards-soft:#e9ecf6; --conf:#0e7c6b; --conf-soft:#d9f2ec;
   --display:"Archivo Narrow","Noto Sans KR",system-ui,sans-serif;
   --body:"Noto Sans KR",system-ui,-apple-system,sans-serif;
 }
@@ -37,12 +37,12 @@ window.PAGE_PASSWORD = "1226";   // 빈 문자열이면 비밀번호 없이 열�
   --bg:#141a21; --panel:#1d252e; --fg:#e8ecf0; --muted:#98a3ae; --line:#303a45; --line2:#242d37;
   --accent:#5fb6d0; --accent-soft:#17394a; --pool:#4fc0d6; --pool-soft:#133c46;
   --exam:#f0885a; --exam-soft:#4a2516; --off:#b7aa8d; --off-soft:#3a3528;
-  --ok:#6cc98a; --ok-soft:#1d3d27; --study:#b2a6f0; --study-soft:#2c2750; --hover:#262440; color-scheme:dark }}
+  --ok:#6cc98a; --ok-soft:#1d3d27; --study:#b2a6f0; --study-soft:#2c2750; --hover:#262440; --quiz:#ff7cc3; --quiz-soft:#4a1434; --rest:#e8b85a; --rest-soft:#463612; --cards:#9aa8d8; --cards-soft:#1f2535; --conf:#4fc7b0; --conf-soft:#123b34; color-scheme:dark }}
 :root[data-theme="dark"]{
   --bg:#141a21; --panel:#1d252e; --fg:#e8ecf0; --muted:#98a3ae; --line:#303a45; --line2:#242d37;
   --accent:#5fb6d0; --accent-soft:#17394a; --pool:#4fc0d6; --pool-soft:#133c46;
   --exam:#f0885a; --exam-soft:#4a2516; --off:#b7aa8d; --off-soft:#3a3528;
-  --ok:#6cc98a; --ok-soft:#1d3d27; --study:#b2a6f0; --study-soft:#2c2750; --hover:#262440; color-scheme:dark }
+  --ok:#6cc98a; --ok-soft:#1d3d27; --study:#b2a6f0; --study-soft:#2c2750; --hover:#262440; --quiz:#ff7cc3; --quiz-soft:#4a1434; --rest:#e8b85a; --rest-soft:#463612; --cards:#9aa8d8; --cards-soft:#1f2535; --conf:#4fc7b0; --conf-soft:#123b34; color-scheme:dark }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;line-height:1.5;margin:0}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
@@ -63,7 +63,18 @@ section{margin-top:18px}
 h2{font-family:var(--display);font-size:17px;margin:0 0 8px;letter-spacing:.02em;text-transform:uppercase;color:var(--muted)}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin-bottom:8px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.calbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.calbar h2{margin:0;flex:1 1 auto}
+.vtog{display:flex}
+.vtog button,.wnav button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--panel);color:var(--fg);padding:3px 11px;cursor:pointer}
+.vtog button:first-child{border-radius:5px 0 0 5px}.vtog button:last-child{border-radius:0 5px 5px 0;margin-left:-1px}
+.vtog button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.wnav{display:flex;gap:4px}.wnav button{border-radius:5px}
 .cal{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.cal.week .day{min-height:170px}
+.cal.week .tag{white-space:normal;line-height:1.3}
+.cal.week .day.out{display:none}
+@media (max-width:760px){.cal.week{grid-template-columns:1fr}.cal.week .dow{display:none}.cal.week .day{min-height:0}.cal.week .tag{display:block}}
 .dow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:2px}
 .day{background:var(--panel);border:1px solid var(--line);border-radius:6px;min-height:86px;padding:6px 7px;text-align:left;font:inherit;color:var(--fg);cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0;position:relative}
 .day:hover{border-color:var(--accent)}
@@ -108,6 +119,11 @@ h2{font-family:var(--display);font-size:17px;margin:0 0 8px;letter-spacing:.02em
 .blk.k-exam{background:var(--exam-soft);border-left-color:var(--exam);font-weight:700}
 .blk.k-swim{background:var(--pool-soft);border-left-color:var(--pool)}
 .blk.k-plan{background:var(--study-soft);border-left-color:var(--study);cursor:pointer;color:var(--fg)}
+.blk.k-plan.rest{background:var(--rest-soft);border-left-color:var(--rest)}
+.ptype{display:inline-flex;flex:none}
+.ptype button{font:inherit;font-size:11.5px;border:1px solid var(--study);background:transparent;color:var(--study);padding:1px 9px;cursor:pointer}
+.ptype button:first-child{border-radius:4px 0 0 4px}.ptype button:last-child{border-radius:0 4px 4px 0;margin-left:-1px;border-color:var(--rest);color:var(--rest)}
+.ptype button[aria-pressed="true"]{background:var(--study);color:#fff}.ptype button:last-child[aria-pressed="true"]{background:var(--rest);color:#fff}
 .blk.k-plan:hover{filter:brightness(.97)}
 .blk.k-plan.done{opacity:.6}
 .blk.k-plan.done .lb{text-decoration:line-through}
@@ -132,24 +148,121 @@ h2{font-family:var(--display);font-size:17px;margin:0 0 8px;letter-spacing:.02em
 .editor .btn.p{background:var(--study);border-color:var(--study);color:#fff}
 .editor .btn.d{color:var(--exam);margin-left:auto}
 /* due box */
-.duebox{background:var(--exam-soft);border:1px solid var(--exam);border-radius:7px;padding:8px 10px 10px;margin-bottom:12px}
+.duebox{background:var(--accent-soft);border:1px solid var(--accent);border-radius:7px;padding:8px 10px 10px;margin-bottom:12px}
+.duebox .due-h{color:var(--accent)}
+.duebox .add input{background:var(--panel)}
+.duebox .todo li.up .jump{background:var(--panel)}
+.duebox .todo li.hw{background:var(--exam-soft)}
+.duebox .todo li.quiz{background:var(--quiz-soft)}
+.duebox .todo li.quiz input[type=checkbox]{accent-color:var(--quiz)}
+.duebox .todo li.up.hw,.duebox .todo li.up.quiz{background:transparent}
+.duebox .todo li.up .jump.q{border-color:var(--quiz);color:var(--quiz)}
+.duebox .todo li.up .jump.q:hover{background:var(--quiz)}
+.qchips button.k-hw{border-color:var(--exam);color:var(--exam)}.qchips button.k-hw[aria-pressed="true"]{background:var(--exam);color:#fff}
+.qchips button.k-cf{border-color:var(--conf);color:var(--conf)}.qchips button.k-cf[aria-pressed="true"]{background:var(--conf);color:#fff}
+.duebox .todo li.conf{background:var(--conf-soft)}
+.duebox .todo li.conf input[type=checkbox]{accent-color:var(--conf)}
+.duebox .todo li.up .jump.c{border-color:var(--conf);color:var(--conf)}
+.excard.conf{border-left-color:var(--conf)}.excard.conf .dd{color:var(--conf)}.excard.conf .padd button{background:var(--conf);border-color:var(--conf)}.excard.conf .prep input[type=checkbox]{accent-color:var(--conf)}
+.t-conf{background:var(--conf);color:#fff;font-weight:700}
+.qchips button.k-qz{border-color:var(--quiz);color:var(--quiz)}.qchips button.k-qz[aria-pressed="true"]{background:var(--quiz);color:#fff}
+.excard.hw{border-left-color:var(--exam)}.excard.hw .dd{color:var(--exam)}.excard.hw .padd button{background:var(--exam);border-color:var(--exam)}.excard.hw .prep input[type=checkbox]{accent-color:var(--exam)}
+.duebox .addwrap{border-top-color:var(--line)}
 .due-h{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--exam);font-weight:700;margin-bottom:4px}
+.due-h{display:flex;align-items:center;gap:8px;color:var(--fg)}
 .due-h span{font-weight:400;letter-spacing:0;text-transform:none;font-family:var(--body);font-size:12px}
+.addtog{margin-left:auto;font:inherit;font-size:11.5px;letter-spacing:0;text-transform:none;border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:0 9px;cursor:pointer;line-height:20px;opacity:.8}
+.addtog:hover,.addtog[aria-expanded="true"]{opacity:1;background:var(--panel)}
+.addwrap{margin-top:4px;padding-top:4px;border-top:1px dashed currentColor}
+.duebox .hwhen{display:block;font-size:11.5px;color:var(--study);font-variant-numeric:tabular-nums}
+.duebox .hplus{font:inherit;font-size:11.5px;border:1px solid var(--study);background:transparent;color:var(--study);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap;flex:none;margin-top:2px}
+.duebox .hplus:hover{background:var(--study-soft)}
+.duebox .sched{margin-left:28px}
+.prep .plrow{display:flex;gap:4px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted);margin:3px 0 0 0;flex-basis:100%}
+.prep .plrow input{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:4px;padding:2px 5px;background:var(--panel);color:var(--fg);text-align:center;font-variant-numeric:tabular-nums}
+.prep .plrow .d{width:58px}.prep .plrow .t{width:56px}
+.prep .plrow button{font:inherit;font-size:12px;border:0;background:transparent;color:var(--exam);cursor:pointer}
+.prep li.editing{flex-wrap:wrap}
 .duebox .todo li:hover{background:rgba(255,255,255,.35)}
 .duebox .todo li.done label{color:var(--muted)}
 .duebox .todo label{font-weight:500}
 .duebox .todo input[type=checkbox]{accent-color:var(--exam)}
 .duebox .add{margin-top:6px}
 .duebox .add input{background:var(--panel)}
-.duebox .add button{background:var(--exam);border-color:var(--exam)}
+.duebox .add button{background:var(--accent);border-color:var(--accent)}
 .duebox .empty{font-size:12px;color:var(--muted);padding:2px 6px}
 .t-due{background:var(--exam);color:#fff;font-weight:700}
+.t-quiz{background:var(--quiz);color:#fff;font-weight:700}
+.tag.dn{opacity:.5;text-decoration:line-through}
+.kind{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.04em;padding:0 6px;border-radius:999px;margin-right:6px;vertical-align:1px;background:var(--exam);color:#fff}
+.kind.q{background:var(--quiz)}
+.duebox.quiz{background:var(--quiz-soft);border-color:var(--quiz)}
+.duebox.quiz .due-h,.duebox.quiz .upg{color:var(--quiz)}
+.duebox.quiz .todo input[type=checkbox]{accent-color:var(--quiz)}
+.duebox.quiz .add button{background:var(--quiz);border-color:var(--quiz)}
+.duebox.quiz .jump{border-color:var(--quiz);color:var(--quiz)}
+.duebox.quiz .jump:hover{background:var(--quiz);color:#fff}
 .duebox .upg{margin-top:8px;color:var(--exam);opacity:.8}
 .duebox li.up{padding:3px 6px;font-size:12.5px;gap:8px;align-items:center}
 .duebox li.up input[type=checkbox]{width:16px;height:16px;margin:0}
 .duebox li.up.done .upl{color:var(--muted);text-decoration:line-through}
 .jump{font:inherit;font-size:11px;font-weight:700;border:1px solid var(--exam);background:var(--panel);color:var(--exam);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap;flex:none}
 .jump:hover{background:var(--exam);color:#fff}
+/* exam prep */
+.qchips{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin:4px 0 2px}
+.qlab{font-size:11px;color:var(--muted);margin-right:2px}
+.qchips button{font:inherit;font-size:11.5px;border:1px solid var(--quiz);background:var(--panel);color:var(--quiz);border-radius:999px;padding:0 9px;cursor:pointer;line-height:20px}
+.qchips button[aria-pressed="true"]{background:var(--quiz);color:#fff}
+.hwchips button{border-color:var(--exam);color:var(--exam)}
+.hwchips button[aria-pressed="true"]{background:var(--exam);color:#fff}
+.exambox.hwbox{border-color:var(--exam)}
+.exambox.hwbox .exam-h,.exambox.hwbox .excard .dd{color:var(--exam)}
+.exambox.hwbox .excard{border-left-color:var(--exam)}
+.exambox.hwbox .padd button{background:var(--exam);border-color:var(--exam)}
+.exambox.hwbox .prep input[type=checkbox]{accent-color:var(--exam)}
+.exambox{background:var(--cards-soft);border:1px solid var(--cards);border-radius:7px;padding:8px 10px 10px;margin-bottom:12px}
+.exam-h{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--cards);font-weight:700;margin-bottom:6px}
+.exam-h span{font-weight:400;letter-spacing:0;text-transform:none;font-family:var(--body);font-size:12px}
+.excard{border:1px solid var(--line);border-left:4px solid var(--quiz);border-radius:6px;margin-bottom:6px;background:var(--panel)}
+.excard.today{border-left-color:var(--exam)}
+.exhead{display:flex;align-items:center;gap:8px;padding:6px 8px;cursor:pointer;min-width:0}
+.exhead .dd{font-family:var(--display);font-weight:700;font-size:15px;color:var(--quiz);font-variant-numeric:tabular-nums;flex:none;min-width:44px}
+.excard.today .dd{color:var(--exam)}
+.exhead .ttl{flex:1;min-width:0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.exhead .ttl small{color:var(--muted);font-weight:400;margin-left:6px}
+.exhead .prog{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+.exhead .warn{font-size:10.5px;background:var(--exam);color:#fff;border-radius:999px;padding:0 7px;flex:none}
+.exhead .caret{color:var(--muted);flex:none;font-size:11px}
+.dchg{font:inherit;font-size:10.5px;border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:0 6px;cursor:pointer;flex:none;opacity:.6}
+.exhead:hover .dchg{opacity:1}
+.exbody{padding:2px 8px 8px 8px;border-top:1px dashed var(--line)}
+.prep{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1px}
+.prep li{display:flex;gap:8px;align-items:flex-start;padding:4px 4px;border-radius:4px;font-size:13px}
+.prep li:hover{background:var(--panel)}
+.prep input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--quiz);flex:none}
+.prep label{flex:1;min-width:0;cursor:pointer}
+.prep li.done label{color:var(--muted);text-decoration:line-through}
+.prep .when{display:block;font-size:11.5px;color:var(--study);font-variant-numeric:tabular-nums}
+.prep .when.none{color:var(--exam)}
+.prep .act{display:flex;gap:2px;flex:none;opacity:.35}
+.prep li:hover .act,.prep li:focus-within .act{opacity:1}
+.prep .act button{font:inherit;font-size:12px;border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px;border-radius:4px;line-height:20px}
+.prep .act button:hover{background:var(--line);color:var(--fg)}
+.prep .pplus{font:inherit;font-size:11.5px;border:1px solid var(--study);background:transparent;color:var(--study);border-radius:999px;padding:0 8px;cursor:pointer;white-space:nowrap;flex:none;margin-top:1px}
+.prep .pplus:hover{background:var(--study-soft)}
+.prep input[type=text].pedit{flex:1;font:inherit;font-size:13px;border:1px solid var(--quiz);border-radius:4px;padding:2px 6px;background:var(--panel);color:var(--fg);min-width:0}
+.sched{display:flex;gap:4px;align-items:center;flex-wrap:wrap;background:var(--study-soft);border-radius:5px;padding:4px 6px;margin:2px 0 4px 28px;font-size:12px;color:var(--muted)}
+.sched input{font:inherit;font-size:12px;border:1px solid var(--line);border-radius:4px;padding:2px 5px;background:var(--panel);color:var(--fg);text-align:center;font-variant-numeric:tabular-nums}
+.sched .d{width:58px}.sched .t{width:56px}
+.sched button{font:inherit;font-size:11.5px;border:1px solid var(--study);background:var(--study);color:#fff;border-radius:4px;padding:1px 9px;cursor:pointer}
+.sched button.c{background:transparent;color:var(--study)}
+.sched .err{color:var(--exam);flex-basis:100%}
+.padd{display:flex;gap:4px;margin-top:6px}
+.padd input{flex:1;min-width:0;font:inherit;font-size:12.5px;border:1px solid var(--line);border-radius:4px;padding:3px 7px;background:var(--panel);color:var(--fg)}
+.padd button{font:inherit;font-size:13px;border:1px solid var(--quiz);background:var(--quiz);color:#fff;border-radius:4px;padding:0 10px;cursor:pointer}
+.exempty{font-size:12px;color:var(--muted);padding:2px 4px}
+.blk.k-plan .xdot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--quiz);margin-right:4px;flex:none;align-self:center}
+.todo .xtag{font-size:11px;color:var(--quiz);margin-left:6px}
 /* goal box */
 .goalbox{background:var(--ok-soft);border:1px solid var(--ok);border-radius:7px;padding:8px 10px 10px;margin-bottom:12px}
 .goal-h{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);font-weight:700;margin-bottom:4px}
@@ -179,6 +292,7 @@ h2{font-family:var(--display);font-size:17px;margin:0 0 8px;letter-spacing:.02em
 .todo .act button{font:inherit;font-size:12px;border:0;background:transparent;color:var(--muted);cursor:pointer;padding:0 4px;border-radius:4px;line-height:20px}
 .todo .act button:hover{background:var(--line);color:var(--fg)}
 .todo input[type=text]{flex:1;font:inherit;font-size:13px;border:1px solid var(--accent);border-radius:4px;padding:2px 6px;background:var(--panel);color:var(--fg);min-width:0}
+.todo li input[type=text].dedit{flex:0 0 64px;text-align:center;font-variant-numeric:tabular-nums;border-color:var(--line)}
 .todo .grp{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 2px;padding:0 6px}
 .todo .grp:first-child{margin-top:0}
 .todo .tm{color:var(--muted);font-variant-numeric:tabular-nums;font-size:12px;margin-right:6px}
@@ -233,12 +347,14 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--line);bor
 
 <div class="wrap">
 <section>
-  <h2>전체 달력 · 10/22 – 11/20 (Thanksgiving 전 종료)</h2>
+  <div class="calbar"><h2 id="calh2">전체 달력 · 10/22 – 11/20 (Thanksgiving 전 종료)</h2><div class="vtog"><button type="button" id="vAll" aria-pressed="true">전체</button><button type="button" id="vWeek" aria-pressed="false">주간</button></div><div class="wnav" id="wnav" hidden><button type="button" id="wPrev">‹ 지난주</button><button type="button" id="wNext">다음주 ›</button></div></div>
   <div class="legend">
     <span><i style="background:var(--exam)"></i>Fall Term 시험</span>
     <span><i style="background:var(--pool)"></i>수영(HPT)·대회</span>
     <span><i style="background:var(--off)"></i>휴일·Free weekend</span>
-    <span><i style="background:var(--study)"></i>적어 넣은 공부 계획</span>
+    <span><i style="background:var(--conf)"></i>선생님 conference</span>
+    <span><i style="background:var(--study)"></i>공부 계획</span>
+    <span><i style="background:var(--rest)"></i>여가·휴식 (교회, 친구, 쉬는 시간)</span>
     <span><i style="background:var(--ok)"></i>그날 체크 완료율</span>
   </div>
   <div class="cal" id="cal"></div>
@@ -255,16 +371,24 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--line);bor
   </div>
   <div class="card">
     <div class="sum"><div class="bar"><i id="sumbar"></i></div><span id="sumtxt">0 / 0</span><span class="ro" id="ro" hidden>보기 전용</span></div>
-    <div class="duebox">
-      <div class="due-h">오늘 마감 (Due) <span id="duecnt"></span></div>
-      <ul class="todo" id="due"></ul>
-      <form class="add" id="duef"><input type="text" id="duein" placeholder="마감 과제 추가 — 날짜 먼저 적으면 그날로 (예: 11/4 화학 Lab 3 report)" maxlength="140"><button type="submit" id="duebtn">추가</button></form>
-    </div>
     <div class="goalbox">
-      <div class="goal-h">오늘 목표 <span id="goalcnt"></span></div>
+      <div class="goal-h">오늘 꼭 끝낼 일 <span id="goalcnt"></span></div>
       <ul class="todo" id="goals"></ul>
-      <form class="add" id="goalf"><input type="text" id="goalin" placeholder="목표 추가 (예: 화학 Ch.4 끝내기, 수학 과제 다 풀기)" maxlength="140"><button type="submit" id="goalbtn">추가</button></form>
-      <div class="goal-tip">목표마다 "+ 시간 계획"을 눌러 그 목표를 언제 할지 왼쪽 시간표에 넣는다.</div>
+      <form class="add" id="goalf"><input type="text" id="goalin" placeholder="오늘 꼭 끝낼 일 (예: 역사 UMT 다 쓰기, 수학 missing 과제 0개)" maxlength="140"><button type="submit" id="goalbtn">추가</button></form>
+      <div class="goal-tip">아침에 1–3개만. "+ 시간 계획"으로 언제 할지 시간표에 넣는다.</div>
+    </div>
+    <div class="duebox">
+      <div class="due-h">오늘 마감 · 시험 <span id="duecnt"></span><button type="button" class="addtog" data-tog="dueadd" aria-expanded="false">＋ 추가</button></div>
+      <ul class="todo" id="due"></ul>
+      <div class="addwrap" id="dueadd" hidden>
+      <div class="qchips" id="dchips"><span class="qlab">과목</span><button type="button" data-subj="C">수학</button><button type="button" data-subj="H">역사</button><button type="button" data-subj="M">화학</button><button type="button" data-subj="E">영어</button><button type="button" data-subj="S">스페인어</button><span class="qlab" style="margin-left:8px">종류</span><button type="button" class="k-hw" data-ekind="hw" aria-pressed="true">HW</button><button type="button" class="k-qz" data-ekind="quiz" aria-pressed="false">Quiz</button><button type="button" class="k-qz" data-ekind="test" aria-pressed="false">Test</button><button type="button" class="k-cf" data-ekind="conf" aria-pressed="false">Conf</button></div>
+      <form class="add" id="duef"><input type="text" id="duein" placeholder="추가 — 날짜 먼저 적으면 그날로 (예: 11/4 Lab 3 report, 10/30 Unit 2). 과목·종류는 위에서 선택" maxlength="140"><button type="submit" id="duebtn">추가</button></form>
+      </div>
+    </div>
+    <div class="exambox">
+      <div class="exam-h">다가오는 숙제 · 시험 체크리스트 <span id="examcnt"></span></div>
+      <div id="exams"></div>
+      <div class="goal-tip">카드를 펼쳐 할 일(숙제 단계, 시험 준비 항목)을 적고, 항목마다 "+ 시간"으로 어느 날 몇 시에 할지 달력에 넣는다. 그 블록을 체크하면 항목도 완료된다.</div>
     </div>
     <ul class="todo" id="todo"></ul>
     <form class="add" id="addf"><input type="text" id="addin" placeholder="추가: 시간 + 할 일 (예: 16:00-17:00 수학 과제) 또는 그냥 할 일" maxlength="140"><button type="submit" id="addbtn">추가</button></form>
@@ -280,10 +404,14 @@ textarea{width:100%;font:inherit;font-size:13px;border:1px solid var(--line);bor
     <p><b>플래너가 먼저.</b> 매 수업이 끝나면 그 자리에서 과제·퀴즈·마감을 플래너에 적는다. "뭐 내야 하는지 몰랐다"가 성적이 무너지는 가장 흔한 이유다.</p>
     <p><b>과제 100%.</b> 다음 수업 전에 그 과목 과제를 반드시 끝낸다. 밀린 과제는 10/25–27 Free weekend에 전부 털고, 재제출·late credit이 되는지 선생님에게 직접 묻는다.</p>
     <p><b>집중 과목.</b> 위 헤더에서 중간 성적이 가장 낮은 과목 1–2개를 눌러 두면 매일 30분 추가 항목이 붙는다. 주 1회 이상 그 과목 선생님 extra help(office hours)에 간다.</p>
-    <p><b>일과표 편집.</b> 빈 칸을 누르면 계획을 적는 창이 뜨고, 시작·끝 시간을 직접 적는다(16:00, 4pm, 4:30pm 모두 됨; 분 단위 자유). 오른쪽 입력창에 "16:00-17:00 수학 과제"처럼 시간과 할 일을 같이 적어도 일과표에 들어간다. 적어 둔 계획은 모두 체크리스트 맨 위 "오늘 공부 계획"에 시간과 함께 올라가고, 체크하면 일과표에서도 완료 표시가 된다. 수업·수영·대회 같은 고정 일정도 ✕로 그날에서 지울 수 있고, "모두 되돌리기"로 복구된다.</p>
+    <p><b>일과표 편집.</b> 빈 칸을 누르면 계획을 적는 창이 뜨고, 위의 "공부 / 여가·휴식" 중 하나를 고른다. 여가(교회, 친구, 쉬는 시간)는 노란 블록으로 들어가고 체크리스트와 완료율에는 포함되지 않는다. 시작·끝 시간을 직접 적는다(16:00, 4pm, 4:30pm 모두 됨; 분 단위 자유). 오른쪽 입력창에 "16:00-17:00 수학 과제"처럼 시간과 할 일을 같이 적어도 일과표에 들어간다. 적어 둔 계획은 모두 체크리스트 맨 위 "오늘 공부 계획"에 시간과 함께 올라가고, 체크하면 일과표에서도 완료 표시가 된다. 수업·수영·대회 같은 고정 일정도 ✕로 그날에서 지울 수 있고, "모두 되돌리기"로 복구된다.</p>
     <p><b>주간 목표.</b> 달력 아래 주별 칸에 그 주의 목표를 원하는 만큼 적는다. 공부할 범위("화학 Ch.4–5 문제 끝내기"), 선생님 conference 계획("화요일 수학 선생님 extra help"), 제출 관련("missing 과제 0개") 같은 식으로. 일요일 체크리스트의 순서대로 하면 결산 → 마감 입력 → 주간 목표 → 시간 배정 → 통화로 끝난다.</p>
-    <p><b>마감.</b> 과제는 마감 날짜에 적는다("11/4 화학 랩 리포트"처럼 날짜를 앞에 쓰면 그날로 들어간다). 마감 3일 전부터 매일 "다가오는 마감"에 미리 보이고, 당일에는 주황 칸 맨 위에 올라온다. 제출하면 당일 칸에서 체크.</p>
-    <p><b>목표 → 시간.</b> 오른쪽 "오늘 목표"에 그날 끝낼 것 1–3개를 적고, 각 목표의 "+ 시간 계획"으로 언제 할지 시간표에 넣는다. 목표 줄에 배정된 시간과 완료된 시간이 집계되므로, 시간이 안 잡힌 목표는 지키기 어렵다고 보면 된다.</p>
+    <p><b>마감·퀴즈.</b> "오늘 마감 · 시험" 창 하나에 숙제(주황)와 퀴즈·시험(분홍)이 함께 보인다. ＋ 추가에서 과목과 종류(HW / Quiz / Test)를 고른 뒤 적는다. 달력에는 "마감 화학 Lab 3", "역사 Test Unit 2"처럼 과목과 제목이 그대로 보이고(완료하면 흐려짐), 달력 위 "전체 / 주간" 버튼으로 한 주만 크게 볼 수도 있다. 각 창에 그 종류를 적으면 되고, 과제는 마감 날짜에 적는다("11/4 화학 랩 리포트"처럼 날짜를 앞에 쓰면 그날로 들어간다). 마감 3일 전부터 매일 "다가오는 마감"에 미리 보이고, 당일에는 주황 칸 맨 위에 올라온다. 제출하면 당일 칸에서 체크.</p>
+    <p><b>마감 날짜 변경.</b> 숙제·시험 카드 제목 줄의 "✎ 날짜"를 누르거나, 숙제·퀴즈 창에서 연필을 눌러 날짜 칸을 고치면 항목과 단계, 달력에 넣어 둔 준비 블록의 연결이 모두 새 날짜로 따라간다.</p>
+    <p><b>선생님 conference.</b> 종류에서 Conf를 고르고 과목과 날짜를 적으면 초록색으로 들어간다. 날짜가 아직 안 잡혔으면 "이번 주 안에"라는 뜻으로 그 주 금요일에 넣고, 카드 안에 준비 항목(이메일로 시간 잡기 → 질문 3개 적기 → 틀린 과제 가져가기)을 적어 하나씩 체크한다. 시간이 확정되면 "+ 시간"으로 달력에 넣고 "✎ 날짜"로 날짜를 옮기면 된다.</p>
+    <p><b>숙제 카드.</b> 숙제도 시험처럼 "다가오는 숙제 · 시험" 패널에 카드가 생기고(숙제는 주황, 시험은 분홍 테두리), 큰 과제는 단계(자료 읽기 → 초안 → 퇴고)를 적어 단계마다 시간을 배정할 수 있다. 왼쪽 시간표에서 빈 칸을 눌러 계획을 적을 때도 "연결" 메뉴에서 오늘 꼭 끝낼 일·숙제·시험 준비 항목 중 하나를 골라 붙일 수 있다.</p>
+    <p><b>시험 준비.</b> 퀴즈·시험은 과목·종류를 고르고 날짜와 함께 적는다. 그러면 "다가오는 시험"에 D-day 카드가 생기고, 카드 안에 준비 항목(예: Memorize map + dates, Finish VHL)을 원하는 만큼 적는다. 항목마다 "+ 시간"으로 날짜·시간을 정해 달력에 넣고, 그 블록을 체크하면 준비 항목도 완료된다. D-3 안에 시간이 안 잡힌 항목이 있으면 빨간 경고가 붙는다.</p>
+    <p><b>오늘 꼭 끝낼 일.</b> 오른쪽 맨 위 칸에 아침마다 그날 반드시 끝낼 것 1–3개를 적고, 각 목표의 "+ 시간 계획"으로 언제 할지 시간표에 넣는다. 목표 줄에 배정된 시간과 완료된 시간이 집계되므로, 시간이 안 잡힌 목표는 지키기 어렵다고 보면 된다.</p>
     <p><b>보고.</b> 밤 10:30에 체크리스트를 보고 아빠와 5분 통화(한국 낮 1:30). 못 한 항목은 왜 못 했는지 메모에 남긴다.</p>
     <p><b>시험 준비 단계(11/9~).</b> 매일 저녁 블록 중 1시간은 그날 지정된 과목의 누적 복습. 11/14–17은 과목별 모의 시험. 시험 시간표가 나오면 알려주면 11/18–20을 과목별로 다시 짠다.</p>
   </div>
@@ -359,9 +487,26 @@ function phaseOf(k){return PHASES.find(p=>k>=p.from&&k<=p.to);}
 function nextSchool(k){let d=addDays(fromIso(k),1);for(let i=0;i<10;i++){const j=iso(d);if(SCHOOL[j])return j;d=addDays(d,1);}return null;}
 
 // ---------- state ----------
-const state={focus:[],weeks:{},days:{},db:null,canWrite:true,sel:null};
+const state={focus:[],weeks:{},days:{},db:null,canWrite:true,sel:null,view:'all'};
+try{state.view=localStorage.getItem('gieun-plan-view')||'all';}catch(e){}
 function rec(k){state.days[k]=state.days[k]||{};const r=state.days[k];r.done=r.done||{};r.note=r.note||'';r.hidden=r.hidden||{};r.edited=r.edited||{};r.extra=r.extra||[];r.plans=r.plans||[];r.tlhide=r.tlhide||{};r.due=r.due||[];r.goals=r.goals||[];return r;}
 function peek(k){return state.days[k]||{done:{},note:'',hidden:{},edited:{},extra:[],plans:[],tlhide:{},due:[],goals:[]};}
+const KIND={quiz:'Quiz',test:'Test'};
+function hwTitle(x){return (x.subj?SHORT[x.subj]+' ':'')+(x.t==='conf'?'Conf':'HW')+(x.l?' · '+x.l:'');}
+function examTitle(x){return (x.subj?SHORT[x.subj]+' ':'')+(KIND[x.kind]||'Quiz')+(x.l?' · '+x.l:'');}
+// move a homework/exam to another due date: item (with its steps and done flag) and every linked plan follow
+function parseMD(v){const m=String(v).trim().match(/^(\d{1,2})[\/\-.](\d{1,2})$/);if(!m)return null;const k=iso(new Date(2026,+m[1]-1,+m[2]));return (k<iso(START)||k>iso(END))?null:k;}
+function moveDue(od,id,nd){if(od===nd)return true;const ro=rec(od);const x=ro.due.find(y=>y.id===id);if(!x)return false;
+ ro.due=ro.due.filter(y=>y.id!==id);const dn=!!ro.done['d_'+id];ro.done=Object.assign({},ro.done);delete ro.done['d_'+id];
+ const rn=rec(nd);rn.due=[...rn.due,x];if(dn)rn.done=Object.assign({},rn.done,{['d_'+id]:true});
+ const touched=new Set([od,nd]);
+ Object.keys(state.days).forEach(dk=>{let ch=false;const pl=(state.days[dk].plans||[]).map(pp=>{if(pp.ex&&pp.ex.q===id&&pp.ex.d===od){ch=true;return Object.assign({},pp,{ex:Object.assign({},pp.ex,{d:nd})});}if(pp.hw&&pp.hw.id===id&&pp.hw.d===od){ch=true;return Object.assign({},pp,{hw:{d:nd,id}});}if(pp.xq&&pp.xq.q===id&&pp.xq.d===od){ch=true;return Object.assign({},pp,{xq:{d:nd,q:id}});}return pp;});if(ch){rec(dk).plans=pl;touched.add(dk);}});
+ touched.forEach(dk=>saveDay(dk));return true;}
+function hwPlans(hid){const out=[];Object.keys(state.days).forEach(dk=>{(state.days[dk].plans||[]).forEach(p=>{if(p.hw&&p.hw.id===hid)out.push(Object.assign({dk},p));});});return out.sort((a,b)=>a.dk===b.dk?a.s-b.s:(a.dk<b.dk?-1:1));}
+function examPlans(qid){const out=[];Object.keys(state.days).forEach(dk=>{(state.days[dk].plans||[]).forEach(p=>{if(p.ex&&p.ex.q===qid)out.push(Object.assign({dk},p));});});return out.sort((a,b)=>a.dk===b.dk?a.s-b.s:(a.dk<b.dk?-1:1));}
+function upcomingDue(k,type){const out=[];let d=fromIso(k);for(let i=0;i<=21;i++){const dk=iso(d);if(dk>iso(END))break;(peek(dk).due||[]).forEach(x=>{if(type==='all'||(x.t==='quiz')===(type==='quiz'))out.push({dk,off:i,x});});d=addDays(d,1);}return out;}
+function upcomingExams(k){return upcomingDue(k,'quiz');}
+function dueTitle(x){return x.t==='quiz'?examTitle(x):hwTitle(x);}
 function goalName(k,gid){const g=(peek(k).goals||[]).find(x=>x.id===gid);return g?g.l:'';}
 
 // ---------- build a day ----------
@@ -404,44 +549,33 @@ function buildDay(k){
  else if(wd===6){S(9*60,12*60,rev?'누적 복습 '+SHORT[rev]+' + 미완 과제':'미완 과제 + 집중 과목');S(14*60,16*60,k>='2026-11-14'?'모의 시험 1과목':'다음 주 과제 미리');}
  else {S(10*60,12*60,rev?'누적 복습 '+SHORT[rev]:'다음 주 과제');S(14*60,17*60,k>='2026-11-14'?'모의 시험 1과목 + 오답':'집중 과목 2h + 나머지 1h');S(19*60,21*60,'주간 리뷰 · 다음 주 마감 정리 · 아빠 통화');}
 
- // ---- checklist ----
+ // ---- checklist (auto items kept minimal: 기본 · 오늘 수업 과목 · 마무리 · 일요일 주간 계획) ----
  const G=(g,id,l)=>todo.push({g,id,l});
  if(sch&&!sch.exam){
   G('기본','planner','플래너: 오늘 수업에서 나온 과제·퀴즈·마감 전부 적기 (수업 직후)');
   subjToday.forEach(c=>G('오늘 수업 과목',c+'_hw',SHORT[c]+' — 과제 완료, 모르는 것 적어두기'));
-  subjNext.filter(c=>!subjToday.includes(c)).forEach(c=>G('내일 수업 준비',c+'_prep',SHORT[c]+' — 내일 제출분 끝내고 가방에'));
-  if(rev) G('시험 준비','rev_'+rev,'누적 복습 '+SHORT[rev]+' 60분 — 지금까지 범위 요약 1장 만들기');
-  focus.forEach(c=>G('집중 과목','f_'+c,SHORT[c]+' 추가 30분 (교과서 문제/오답)'));
-  if(wd===2||wd===4) G('주간',(wd===2?'eh1':'eh2'),'집중 과목 선생님 extra help 다녀오기 (주 1회 이상)');
-  if(wd===5) G('주간','portal','성적 포털 확인 · 빠진 과제(missing) 0개인지');
-  if(k==='2026-10-22') G('이번 주','grades','과목별 현재 성적·빠진 과제 표 만들어 아빠에게 보내기');
-  if(k==='2026-10-23') G('이번 주','ask','빠진 과제 재제출 가능한지 선생님께 질문/이메일');
   G('마무리','report','22:30 체크리스트 보고 + 아빠 통화');
  } else if(sch&&sch.exam){
   G('시험','exam_confirm','오늘 시험 과목·시간 확인, 준비물(계산기 등) 챙김');
-  G('시험','exam_done','시험 후 바로 다음 시험 과목 복습 시작');
   G('마무리','report','체크리스트 보고 + 아빠 통화');
   if(k==='2026-11-20') G('끝','finish','Fall term 끝 — 수고했어. Thanksgiving 잘 보내기');
+ } else if((wd===0&&!off)||k==='2026-10-26'){
+  G('일요일 주간 계획 (순서대로)','wk1','지난주 결산: 체크율 보고, 못 지킨 이유 한 줄 메모에 적기');
+  G('일요일 주간 계획 (순서대로)','wk2','다음 주 마감 전부 입력 (플래너·포털 확인 → 마감 칸에 날짜와 함께)');
+  G('일요일 주간 계획 (순서대로)','wk3','다음 주 주간 목표 적기 (공부 범위, 선생님 conference, missing 과제 등 — 개수 제한 없음)');
+  G('일요일 주간 계획 (순서대로)','wk4','주간 목표마다 이번 주 어느 날 어느 시간에 할지 시간표에 넣기');
+  G('일요일 주간 계획 (순서대로)','wk5','아빠와 통화로 다음 주 계획 확정');
  } else {
-  if(k==='2026-10-24'){G('기본','planner','빠진 과제 목록 완성 (과목·제목·마감·재제출 가능 여부)');G('마무리','report','아빠에게 목록 보내기');}
-  else if(off){G('밀린 과제','backlog','밀린 과제 처리 (오늘 끝낸 것 메모에 적기)');if(k==='2026-10-27')G('이번 주','plan','이번 주 계획표 보고 아빠와 통화');else G('마무리','report','체크리스트 보고 + 아빠 통화');}
-  else if(allDay.length){G('대회','cards','대기 시간 카드 복습 45분');G('마무리','report','체크리스트 보고');}
-  else if(wd===6){if(rev)G('시험 준비','rev_'+rev,'누적 복습 '+SHORT[rev]);if(k>='2026-11-14')G('시험 준비','mock','모의 시험 1과목 + 오답 정리');G('마무리','report','체크리스트 보고');}
-  else {if(rev)G('시험 준비','rev_'+rev,'누적 복습 '+SHORT[rev]);if(k>='2026-11-14')G('시험 준비','mock','모의 시험 1과목 + 오답 정리');
-   G('일요일 주간 계획 (순서대로)','wk1','지난주 결산: 체크율 보고, 못 지킨 이유 한 줄 메모에 적기');
-   G('일요일 주간 계획 (순서대로)','wk2','다음 주 마감 전부 입력 (플래너·포털 확인 → 마감 칸에 날짜와 함께)');
-   G('일요일 주간 계획 (순서대로)','wk3','다음 주 주간 목표 적기 (공부 범위, 선생님 conference, missing 과제 등 — 개수 제한 없음)');
-   G('일요일 주간 계획 (순서대로)','wk4','주간 목표마다 이번 주 어느 날 어느 시간에 할지 시간표에 넣기');
-   G('일요일 주간 계획 (순서대로)','wk5','아빠와 통화로 다음 주 계획 확정');}
+  G('마무리','report','체크리스트 보고 + 아빠 통화');
  }
  return {k,d,wd,sch,off,allDay,fixed:vis,hiddenN:fixed.filter(f=>hid[f.key]).length+ev.filter(e=>e.allDay&&hid['ev:'+e.l]).length,sugg,todo,plans:(r.plans||[]).slice().sort((a,b)=>a.s-b.s)};
 }
 function itemsFor(k){
  const o=buildDay(k), r=peek(k), hid=r.hidden||{}, ed=r.edited||{};
  const out=[];
- (r.due||[]).forEach(x=>out.push({g:'오늘 마감',id:'d_'+x.id,l:x.l,custom:true,due:true}));
+ (r.due||[]).forEach(x=>out.push({g:'오늘 마감',id:'d_'+x.id,l:x.l,custom:true,due:true,quiz:x.t==='quiz'}));
  (r.goals||[]).forEach(x=>out.push({g:'오늘 목표',id:'g_'+x.id,l:x.l,custom:true,goal:true}));
- o.plans.forEach(p=>out.push({g:'오늘 공부 계획',id:'p_'+p.id,l:p.l,tm:fmt(p.s)+'–'+fmt(p.e),custom:true,gn:p.g?goalName(k,p.g):''}));
+ o.plans.filter(p=>p.type!=='rest').forEach(p=>{let xn='';if(p.ex){const q=(peek(p.ex.d).due||[]).find(y=>y.id===p.ex.q);if(q)xn=dueTitle(q)+(q.t==='quiz'?' 준비':'');}else if(p.hw){const d2=fromIso(p.hw.d);const hx=(peek(p.hw.d).due||[]).find(y=>y.id===p.hw.id);xn=(hx&&hx.t==='conf'?'Conference · ':'숙제 · ')+(d2.getMonth()+1)+'/'+d2.getDate()+(hx&&hx.t==='conf'?'':' 마감');}else if(p.xq){const q=(peek(p.xq.d).due||[]).find(y=>y.id===p.xq.q);if(q)xn=examTitle(q)+' 준비';}out.push({g:'오늘 공부 계획',id:'p_'+p.id,l:p.l,tm:fmt(p.s)+'–'+fmt(p.e),custom:true,gn:p.g?goalName(k,p.g):'',xn});});
  o.todo.filter(t=>!hid[t.id]).forEach(t=>out.push({g:t.g,id:t.id,l:ed[t.id]||t.l}));
  (r.extra||[]).forEach(x=>out.push({g:'추가 항목',id:x.id,l:x.l,custom:true}));
  return out;
@@ -474,7 +608,12 @@ const ROW=16; const y=m=>(m-G0)/STEP*ROW;
 
 function renderCal(){
  calEl.innerHTML=''; DOW.forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;calEl.appendChild(e);});
- let d=addDays(START,-START.getDay()); const last=addDays(END,6-END.getDay());
+ let d=addDays(START,-START.getDay()); let last=addDays(END,6-END.getDay());
+ calEl.classList.toggle('week',state.view==='week');
+ if(state.view==='week'){const sd=fromIso(state.sel);d=addDays(sd,-sd.getDay());last=addDays(d,6);}
+ document.getElementById('wnav').hidden=state.view!=='week';
+ document.getElementById('vAll').setAttribute('aria-pressed',state.view==='all');document.getElementById('vWeek').setAttribute('aria-pressed',state.view==='week');
+ document.getElementById('calh2').textContent=state.view==='week'?'주간 달력 · '+(d.getMonth()+1)+'/'+d.getDate()+' – '+(last.getMonth()+1)+'/'+last.getDate():'전체 달력 · 10/22 – 11/20 (Thanksgiving 전 종료)';
  for(;d<=last;d=addDays(d,1)){
   const k=iso(d); const b=document.createElement('button'); b.type='button'; b.className='day';
   if(d<START||d>END){b.className+=' out';b.tabIndex=-1;calEl.appendChild(b);continue;}
@@ -488,14 +627,14 @@ function renderCal(){
   o.allDay.forEach(e=>{h+='<span class="tag t-meet">'+e.l+'</span>';});
   o.fixed.filter(f=>f.k==='swim'&&!f.l.startsWith('HPT')).forEach(f=>{h+='<span class="tag '+(f.l.includes('Diving')?'t-meet':'t-swim')+'">'+f.l+'</span>';});
   const sw=o.fixed.filter(f=>f.l.startsWith('HPT')); if(sw.length)h+='<span class="tag t-swim">'+(sw.length>1?'수영 아침+저녁':'수영 '+fmt(sw[0].s))+'</span>';
-  const du=(peek(k).due||[]); if(du.length)h+='<span class="tag t-due">마감 '+du.length+'</span>';
-  if(o.plans.length)h+='<span class="tag t-study">공부 계획 '+o.plans.length+'</span>';
+  const du=(peek(k).due||[]); const dd0=(peek(k).done||{}); du.forEach(x=>{const dn=!!dd0['d_'+x.id]; if(x.t==='quiz')h+='<span class="tag t-quiz'+(dn?' dn':'')+'" title="'+escT(x.l||'')+'">'+escT((x.subj?SHORT[x.subj]+' ':'')+(KIND[x.kind]||'Quiz'))+'</span>'; else if(x.t==='conf')h+='<span class="tag t-conf'+(dn?' dn':'')+'" title="'+escT(x.l||'')+'">'+escT((x.subj?SHORT[x.subj]+' ':'')+'Conf')+'</span>'; else h+='<span class="tag t-due'+(dn?' dn':'')+'" title="'+escT(x.l||'')+'">'+escT((x.subj?SHORT[x.subj]+' ':'')+'HW')+'</span>';});
+  const ns=o.plans.filter(p=>p.type!=='rest').length; if(ns)h+='<span class="tag t-study">공부 계획 '+ns+'</span>';
   h+='<div class="bar"><i style="width:'+pr.p+'%"></i></div>';
   b.innerHTML=h; b.addEventListener('click',()=>{editing=null;editor=null;state.sel=k;render();}); calEl.appendChild(b);
  }
  const wk=document.getElementById('weeks'); wk.innerHTML='';
  const weeks=[['2026-10-22','2026-10-27','이번 주 + Free weekend','현황 파악 → 밀린 과제 0개'],['2026-10-28','2026-11-01','10/28 주','루틴 첫 주: 세 블록 매일'],['2026-11-02','2026-11-08','11/2 주','과제 100% · 주말 swim meet'],['2026-11-09','2026-11-15','11/9 주','누적 복습 시작 · 토 대회'],['2026-11-16','2026-11-20','11/16 주','모의 → 시험 (수·목·금)']];
- weeks.forEach((w,i)=>{let n=0,dn=0;let d=fromIso(w[0]);for(;iso(d)<=w[1];d=addDays(d,1)){const p=progress(iso(d));n+=p.n;dn+=p.done;}
+ weeks.forEach((w,i)=>{if(state.view==='week'&&!(state.sel>=w[0]&&state.sel<=w[1]))return;let n=0,dn=0;let d=fromIso(w[0]);for(;iso(d)<=w[1];d=addDays(d,1)){const p=progress(iso(d));n+=p.n;dn+=p.done;}
   const goals=weekGoals(i); const e=document.createElement('div'); e.className='wkbox'+(state.sel>=w[0]&&state.sel<=w[1]?' cur':'');
   let h='<b>'+w[2]+'</b><small class="wkth">'+escT(w[3])+'</small><ul class="wkg">';
   goals.forEach(g=>{const eid='wg_'+i+'_'+g.id;
@@ -524,36 +663,88 @@ function renderGrid(o){
  }
  const blk=(x,cls,inner)=>'<div class="blk '+cls+(x.e-x.s>=60?' tall':'')+'" style="top:'+(y(x.s)+1)+'px;height:'+(y(x.e)-y(x.s)-2)+'px">'+inner+'</div>';
  o.fixed.forEach(f=>{h+=blk(f,'k-'+f.k,'<span class="tm">'+fmt(f.s)+'–'+fmt(f.e)+'</span><span class="lb">'+f.l+'</span>'+(state.canWrite?'<span class="act"><button type="button" data-hide="'+escT(f.key)+'" title="이 일정 지우기">✕</button></span>':''));});
- o.plans.forEach(p=>{const dn=!!(r.done||{})['p_'+p.id];h+='<div class="blk k-plan'+(p.e-p.s>=60?' tall':'')+(dn?' done':'')+'" data-plan="'+p.id+'" role="button" tabindex="0" style="top:'+(y(p.s)+1)+'px;height:'+(y(p.e)-y(p.s)-2)+'px"><span class="tm">'+fmt(p.s)+'–'+fmt(p.e)+'</span>'+(p.g?'<span class="gdot" title="'+escT(goalName(k,p.g))+'"></span>':'')+'<span class="lb">'+escT(p.l)+'</span>'+(state.canWrite?'<span class="act"><button type="button" data-pdel="'+p.id+'" title="삭제">✕</button></span>':'')+'</div>';});
+ o.plans.forEach(p=>{const dn=!!(r.done||{})['p_'+p.id];h+='<div class="blk k-plan'+(p.e-p.s>=60?' tall':'')+(dn?' done':'')+(p.type==='rest'?' rest':'')+'" data-plan="'+p.id+'" role="button" tabindex="0" style="top:'+(y(p.s)+1)+'px;height:'+(y(p.e)-y(p.s)-2)+'px"><span class="tm">'+fmt(p.s)+'–'+fmt(p.e)+'</span>'+(p.g?'<span class="gdot" title="'+escT(goalName(k,p.g))+'"></span>':'')+(p.ex?'<span class="xdot" title="시험 준비"></span>':'')+(p.hw?'<span class="xdot" style="background:var(--exam)" title="숙제"></span>':'')+(p.xq?'<span class="xdot" title="시험 준비"></span>':'')+'<span class="lb">'+escT(p.l)+'</span>'+(state.canWrite?'<span class="act"><button type="button" data-pdel="'+p.id+'" title="삭제">✕</button></span>':'')+'</div>';});
  if(editor){
-  h+='<div class="editor" style="top:'+(y(editor.s)+2)+'px"><input type="text" id="pl" value="'+escT(editor.l)+'" placeholder="이 시간에 할 공부 (예: 화학 Ch.4 문제 + 노트 정리)" maxlength="140"><div class="row"><span class="tspan"><input type="text" id="ps" class="tin" value="'+fmt(editor.s)+'" placeholder="16:00" inputmode="numeric"><span>부터</span><input type="text" id="pe" class="tin" value="'+fmt(editor.e)+'" placeholder="17:30" inputmode="numeric"><span>까지</span></span>'+((r.goals||[]).length?'<select id="pg"><option value="">목표 연결 없음</option>'+(r.goals||[]).map(g=>'<option value="'+g.id+'"'+(editor.g===g.id?' selected':'')+'>'+escT(g.l)+'</option>').join('')+'</select>':'')+'<span id="perr" style="color:var(--exam)"></span><button type="button" class="btn p" data-psave="1">저장</button><button type="button" class="btn" data-pcancel="1">취소</button>'+(editor.id?'<button type="button" class="btn d" data-pdel="'+editor.id+'">삭제</button>':'')+'</div></div>';
+  const isRest=editor.type==='rest';
+  h+='<div class="editor" style="top:'+(y(editor.s)+2)+'px"><div class="row"><span class="ptype"><button type="button" data-ptype="study" aria-pressed="'+(!isRest)+'">공부</button><button type="button" data-ptype="rest" aria-pressed="'+isRest+'">여가·휴식</button></span></div><input type="text" id="pl" value="'+escT(editor.l)+'" placeholder="'+(isRest?'여가 (예: 교회, 친구랑 저녁, 낮잠)':'이 시간에 할 공부 (예: 화학 Ch.4 문제 + 노트 정리)')+'" maxlength="140"><div class="row"><span class="tspan"><input type="text" id="ps" class="tin" value="'+fmt(editor.s)+'" placeholder="16:00" inputmode="numeric"><span>부터</span><input type="text" id="pe" class="tin" value="'+fmt(editor.e)+'" placeholder="17:30" inputmode="numeric"><span>까지</span></span>'+(isRest?'':linkSelect(k,r,editor))+'<span id="perr" style="color:var(--exam)"></span><button type="button" class="btn p" data-psave="1">저장</button><button type="button" class="btn" data-pcancel="1">취소</button>'+(editor.id?'<button type="button" class="btn d" data-pdel="'+editor.id+'">삭제</button>':'')+'</div></div>';
  }
  colEl.style.height=y(G1)+'px'; colEl.innerHTML=h;
  if(editor){const i=document.getElementById('pl');if(i){i.focus();i.select();}}
  document.getElementById('restore').hidden=!o.hiddenN||!state.canWrite; document.getElementById('hidn').textContent=o.hiddenN;
 }
 
+let openEx={}, schedFor=null, dateEdit=null; // schedFor: {key,d} prep item being scheduled
+function renderExams(k,r){renderCards(k,'all',document.getElementById('exams'),document.getElementById('examcnt'),'앞으로 3주 안에 적어 둔 숙제·시험이 없음. 위 "오늘 마감 · 시험" 창의 ＋ 추가로 날짜와 함께 적으면 여기에 카드가 생긴다.');}
+function renderCards(k,type,el,cntEl,emptyMsg){
+ const ups=upcomingDue(k,type); let h='';
+ ups.forEach(({dk,off,x})=>{
+  const key=dk+'|'+x.id; const pr=x.prep||[]; const done=pr.filter(z=>z.done).length;
+  const plans=examPlans(x.id); const unsched=pr.filter(z=>!z.done&&!plans.some(p=>p.ex.p===z.id)).length;
+  const open=openEx[key]!=null?openEx[key]:(off<=7);
+  const dd=off===0?'오늘':'D-'+off; const dt=fromIso(dk);
+  h+='<div class="excard'+(off===0?' today':'')+(x.t==='quiz'?' quiz':x.t==='conf'?' conf':' hw')+'"><div class="exhead" data-ex="'+key+'"><span class="dd">'+dd+'</span><span class="ttl">'+escT(dueTitle(x))+'<small>'+(dt.getMonth()+1)+'/'+dt.getDate()+' ('+DOW[dt.getDay()]+')</small></span>'+(pr.length?'<span class="prog">'+(x.t==='quiz'?'준비 ':x.t==='conf'?'준비 ':'단계 ')+done+'/'+pr.length+'</span>':'<span class="prog">'+(x.t==='hw'?'단계 없음':'준비 항목 없음')+'</span>')+(off<=3&&unsched?'<span class="warn">시간 미배정 '+unsched+'</span>':'')+(state.canWrite?'<button type="button" class="dchg" data-dchg="'+key+'" title="마감 날짜 변경">✎ 날짜</button>':'')+'<span class="caret">'+(open?'▾':'▸')+'</span></div>'+(dateEdit===key?'<div class="sched" style="margin:4px 8px 6px"><span>새 마감일</span><input type="text" class="d" id="nd" value="'+(dt.getMonth()+1)+'/'+dt.getDate()+'"><button type="button" data-dsave="'+key+'">변경</button><button type="button" class="c" data-dcancel="1">취소</button><span class="err" id="nderr"></span></div>':'');
+  if(open){
+   h+='<div class="exbody"><ul class="prep">';
+   pr.forEach(z=>{const pid=dk+'|'+x.id+'|'+z.id; const mine=plans.filter(p=>p.ex.p===z.id); const hid=pid.replace(/\|/g,'_');
+    if(editing==='prep:'+pid){h+='<li class="editing"><input type="checkbox" '+(z.done?'checked':'')+' disabled><input type="text" class="pedit" data-pedit="'+pid+'" value="'+escT(z.l)+'" maxlength="140"><span class="act"><button type="button" data-psv="'+pid+'">저장</button><button type="button" data-pcancel="1">취소</button></span>';
+     mine.forEach(pl=>{const d2=fromIso(pl.dk);h+='<span class="plrow" data-pl="'+pl.dk+'|'+pl.id+'"><span>시간</span><input type="text" class="d" data-f="d" value="'+(d2.getMonth()+1)+'/'+d2.getDate()+'"><input type="text" class="t" data-f="s" value="'+fmt(pl.s)+'"><span>–</span><input type="text" class="t" data-f="e" value="'+fmt(pl.e)+'"><button type="button" data-plrm="'+pl.dk+'|'+pl.id+'" title="이 시간 삭제">✕ 삭제</button></span>';});
+     h+='<span class="plrow" id="plerr" style="color:var(--exam)"></span></li>';}
+    else {
+     const when=mine.length?mine.map(p=>{const d2=fromIso(p.dk);return (d2.getMonth()+1)+'/'+d2.getDate()+' '+fmt(p.s)+'–'+fmt(p.e)+(((state.days[p.dk]||{}).done||{})['p_'+p.id]?' ✓':'');}).join(', '):'시간 미배정';
+     h+='<li class="'+(z.done?'done':'')+'"><input type="checkbox" id="pp_'+hid+'" data-pchk="'+pid+'" '+(z.done?'checked':'')+(state.canWrite?'':' disabled')+'><label for="pp_'+hid+'">'+escT(z.l)+'<span class="when'+(mine.length?'':' none')+'">'+when+'</span></label>'+(state.canWrite?'<button type="button" class="pplus" data-psched="'+pid+'">+ 시간</button><span class="act"><button type="button" data-ped="'+pid+'" title="수정">✎</button><button type="button" data-pdel2="'+pid+'" title="삭제">✕</button></span>':'')+'</li>';
+     if(schedFor&&schedFor.key===pid){const sd=fromIso(schedFor.d||k);h+='<li class="sched"><span>날짜</span><input type="text" class="d" id="sd" value="'+(sd.getMonth()+1)+'/'+sd.getDate()+'"><span>시작</span><input type="text" class="t" id="ss" value="20:30"><span>끝</span><input type="text" class="t" id="se" value="21:30"><button type="button" data-ssave="'+pid+'">달력에 넣기</button><button type="button" class="c" data-scancel="1">취소</button><span class="err" id="serr"></span></li>';}
+    }});
+   h+='</ul>';
+   if(state.canWrite) h+='<form class="padd" data-pform="'+key+'"><input type="text" placeholder="'+(x.t==='quiz'?'준비 항목 추가 (예: Memorize map + dates, Essay on example prompt)':x.t==='conf'?'준비 항목 추가 (예: 이메일로 시간 잡기, 물어볼 질문 3개 적기, 틀린 과제 가져가기)':'단계 추가 (예: 자료 읽기, 초안 쓰기, 퇴고 후 제출)')+'" maxlength="140"><button type="submit">+</button></form>';
+   h+='</div>';
+  }
+  h+='</div>';
+ });
+ el.innerHTML=h||'<div class="exempty">'+emptyMsg+'</div>';
+ cntEl.textContent=ups.length?'· '+ups.length+'개':'';
+ if(editing&&editing.startsWith('prep:')){const i=el.querySelector('input[data-pedit]');if(i){i.focus();i.select();}}
+ if(schedFor&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.sched'))){const i=document.getElementById('ss');if(i)i.focus();}
+}
+function linkOptions(k,r){
+ const o=[];
+ (r.goals||[]).forEach(g=>o.push({v:'g:'+g.id,t:'오늘 꼭 끝낼 일 · '+g.l,l:g.l}));
+ upcomingDue(k,'hw').forEach(({dk,off,x})=>{const d2=fromIso(dk);const tag=(d2.getMonth()+1)+'/'+d2.getDate()+' 마감';o.push({v:'hw:'+dk+'|'+x.id,t:hwTitle(x)+' ('+tag+')',l:hwTitle(x)});(x.prep||[]).forEach(z=>o.push({v:'ex:'+dk+'|'+x.id+'|'+z.id,t:'　└ '+z.l,l:z.l}));});
+ upcomingDue(k,'quiz').forEach(({dk,off,x})=>{const d2=fromIso(dk);o.push({v:'xq:'+dk+'|'+x.id,t:examTitle(x)+' ('+(off===0?'오늘':'D-'+off)+')',l:examTitle(x)+' 준비'});(x.prep||[]).forEach(z=>o.push({v:'ex:'+dk+'|'+x.id+'|'+z.id,t:'　└ '+z.l,l:z.l}));});
+ return o;
+}
+function linkValue(ed){if(ed.ex)return 'ex:'+ed.ex.d+'|'+ed.ex.q+'|'+ed.ex.p;if(ed.xq)return 'xq:'+ed.xq.d+'|'+ed.xq.q;if(ed.hw)return 'hw:'+ed.hw.d+'|'+ed.hw.id;if(ed.g)return 'g:'+ed.g;return '';}
+function linkSelect(k,r,ed){const opts=linkOptions(k,r);if(!opts.length)return '';const cur=linkValue(ed);return '<select id="plink"><option value="">연결 없음</option>'+opts.map(x=>'<option value="'+x.v+'"'+(x.v===cur?' selected':'')+'>'+escT(x.t)+'</option>').join('')+'</select>';}
+function applyLink(plan,v){delete plan.g;delete plan.hw;delete plan.ex;delete plan.xq;plan.g='';if(!v)return plan;const [kind,rest]=[v.slice(0,v.indexOf(':')),v.slice(v.indexOf(':')+1)];
+ if(kind==='g')plan.g=rest;else if(kind==='hw'){const [d,id]=rest.split('|');plan.hw={d,id};}else if(kind==='ex'){const [d,q,p2]=rest.split('|');plan.ex={d,q,p:p2};}else if(kind==='xq'){const [d,q]=rest.split('|');plan.xq={d,q};}
+ return plan;}
 function renderDetail(){
  const k=state.sel, o=buildDay(k), r=peek(k);
  document.getElementById('d-title').textContent=(o.d.getMonth()+1)+'/'+o.d.getDate()+' ('+DOW[o.wd]+')';
  document.getElementById('d-sub').textContent=(o.sch?o.sch.day+' Day'+(o.sch.exam?' · Fall Term 시험':''):(o.off||'주말'))+(o.allDay.length?' · '+o.allDay.map(e=>e.l).join(', '):'')+(k===TODAY?' · 오늘':'');
  renderGrid(o);
- let h='',hd='',g='';
+ let h='',g='';
  const li=t=>{const id='c_'+k+'_'+t.id;const dn=!!(r.done||{})[t.id];
-  if(editing===t.id) return '<li><input type="checkbox" id="'+id+'" data-id="'+t.id+'" '+(dn?'checked':'')+'><input type="text" id="e_'+id+'" data-edit="'+t.id+'" value="'+escT(t.l)+'" maxlength="140"><span class="act"><button type="button" data-save="'+t.id+'">저장</button><button type="button" data-cancel="1">취소</button></span></li>';
+  if(editing===t.id) return '<li><input type="checkbox" id="'+id+'" data-id="'+t.id+'" '+(dn?'checked':'')+'><input type="text" id="e_'+id+'" data-edit="'+t.id+'" value="'+escT(t.l)+'" maxlength="140">'+(t.due?'<input type="text" class="dedit" data-dedit="'+t.id+'" value="'+(o.d.getMonth()+1)+'/'+o.d.getDate()+'" title="마감 날짜">':'')+'<span class="act"><button type="button" data-save="'+t.id+'">저장</button><button type="button" data-cancel="1">취소</button></span></li>';
   return '<li class="'+(dn?'done':'')+'"><input type="checkbox" id="'+id+'" data-id="'+t.id+'" '+(dn?'checked':'')+(state.canWrite?'':' disabled')+'><label for="'+id+'">'+(t.tm?'<span class="tm">'+t.tm+'</span>':'')+(t.custom?escT(t.l):t.l)+'</label>'+(state.canWrite?'<span class="act"><button type="button" data-ed="'+t.id+'" title="수정">✎</button><button type="button" data-del="'+t.id+'" title="삭제">✕</button></span>':'')+'</li>';};
  const items=itemsFor(k); const dues=items.filter(t=>t.due), goals=items.filter(t=>t.goal);
- dues.forEach(t=>{hd+=li(t);});
+ const hws=dues.filter(t=>!t.quiz), qzs=dues.filter(t=>t.quiz);
+ let hd='',hq=''; hws.forEach(t=>{const x=(r.due||[]).find(y=>'d_'+y.id===t.id)||{};let row=li(Object.assign({},t,{l:editing===t.id?(x.l||''):hwTitle(x)})).replace('<li class="','<li class="'+(x.t==='conf'?'conf':'hw')+' ');
+  if(editing!==t.id){const mine=hwPlans(x.id);const when=mine.map(p=>{const d2=fromIso(p.dk);return (d2.getMonth()+1)+'/'+d2.getDate()+' '+fmt(p.s)+'–'+fmt(p.e)+(((state.days[p.dk]||{}).done||{})['p_'+p.id]?' ✓':'');}).join(', ');
+   row=row.replace('</label>',(when?'<span class="hwhen">'+when+'</span>':'')+'</label>'+(state.canWrite?'<button type="button" class="hplus" data-hsched="'+k+'|'+x.id+'">+ 시간</button>':''));
+   if(schedFor&&schedFor.key==='hw:'+k+'|'+x.id){const sd=fromIso(schedFor.d||k);row+='<li class="sched"><span>날짜</span><input type="text" class="d" id="sd" value="'+(sd.getMonth()+1)+'/'+sd.getDate()+'"><span>시작</span><input type="text" class="t" id="ss" value="16:00"><span>끝</span><input type="text" class="t" id="se" value="17:00"><button type="button" data-hsave="'+k+'|'+x.id+'">달력에 넣기</button><button type="button" class="c" data-scancel="1">취소</button><span class="err" id="serr"></span></li>';}}
+  hd+=row;});
+ qzs.forEach(t=>{const x=(r.due||[]).find(y=>'d_'+y.id===t.id)||{};const pr=x.prep||[];const t2=Object.assign({},t,{l:editing===t.id?(x.l||''):examTitle(x)});hq+=li(t2).replace('<li class="','<li class="quiz ').replace('</label>',(pr.length?'<span class="xtag">준비 '+pr.filter(z=>z.done).length+'/'+pr.length+'</span>':'')+'</label>');});
+ // upcoming (next 3 days), split by kind; each row jumps to that day and can be checked early
+ let uh='',uq='',ua=''; [1,2,3].forEach(off=>{const dk=iso(addDays(o.d,off)); if(dk>iso(END)) return; const dd=peek(dk); (dd.due||[]).forEach(x=>{const dn=!!(dd.done||{})['d_'+x.id]; const lbl=x.t==='quiz'?examTitle(x):hwTitle(x); let row='<li class="up '+(x.t==='quiz'?'quiz':x.t==='conf'?'conf':'hw')+(dn?' done':'')+'"><input type="checkbox" id="u_'+dk+'_'+x.id+'" data-dk="'+dk+'" data-id="d_'+x.id+'" '+(dn?'checked':'')+(state.canWrite?'':' disabled')+' title="미리 끝냈으면 체크"><button type="button" class="jump'+(x.t==='quiz'?' q':x.t==='conf'?' c':'')+'" data-jump="'+dk+'">'+(off===1?'내일':off===2?'모레':'3일 뒤')+' ('+(fromIso(dk).getMonth()+1)+'/'+fromIso(dk).getDate()+')</button><span class="upl">'+escT(lbl)+(dn?' · 완료':'')+(x.t!=='quiz'&&hwPlans(x.id).length?'<span class="hwhen">'+hwPlans(x.id).map(p=>{const d2=fromIso(p.dk);return (d2.getMonth()+1)+'/'+d2.getDate()+' '+fmt(p.s)+'–'+fmt(p.e);}).join(', ')+'</span>':'')+'</span>'+(x.t!=='quiz'&&state.canWrite?'<button type="button" class="hplus" data-hsched="'+dk+'|'+x.id+'">+ 시간</button>':'')+'</li>'; if(x.t!=='quiz'&&schedFor&&schedFor.key==='hw:'+dk+'|'+x.id){const sd=fromIso(schedFor.d||k);row+='<li class="sched"><span>날짜</span><input type="text" class="d" id="sd" value="'+(sd.getMonth()+1)+'/'+sd.getDate()+'"><span>시작</span><input type="text" class="t" id="ss" value="16:00"><span>끝</span><input type="text" class="t" id="se" value="17:00"><button type="button" data-hsave="'+dk+'|'+x.id+'">달력에 넣기</button><button type="button" class="c" data-scancel="1">취소</button><span class="err" id="serr"></span></li>';} ua+=row;});});
+ document.getElementById('due').innerHTML=((hd+hq)||'<li class="empty">오늘 마감인 숙제·시험 없음. 플래너에 적힌 마감과 예고된 퀴즈는 ＋ 추가로 그 날짜에 적을 것.</li>')+(ua?'<li class="grp upg">다가오는 마감 · 시험 (3일 안)</li>'+ua:'');
+ document.getElementById('duecnt').textContent=dues.length?'· '+dues.filter(t=>(r.done||{})[t.id]).length+'/'+dues.length+' 완료':'';
+ renderExams(k,r);
  let hg=''; goals.forEach(t=>{const gid=t.id.slice(2);const ps=(r.plans||[]).filter(p=>p.g===gid);const min=ps.reduce((a,p)=>a+(p.e-p.s),0);const dnm=ps.filter(p=>(r.done||{})['p_'+p.id]).reduce((a,p)=>a+(p.e-p.s),0);
   let row=li(t); if(editing!==t.id){row=row.replace('</label>','<span class="gmeta">'+(ps.length?'<span class="pl">'+ps.map(p=>fmt(p.s)+'–'+fmt(p.e)).join(', ')+'</span> · 계획 '+min+'분'+(dnm?' (완료 '+dnm+'분)':''):'아직 시간 계획 없음')+'</span></label>'+(state.canWrite?'<button type="button" class="gplus" data-gplus="'+gid+'">+ 시간 계획</button>':''));}
   hg+=row;});
  document.getElementById('goals').innerHTML=hg||'<li class="empty">오늘 끝내야 할 것 1–3개를 목표로 적고, 각 목표에 시간을 배정한다.</li>';
  document.getElementById('goalcnt').textContent=goals.length?'· '+goals.filter(t=>(r.done||{})[t.id]).length+'/'+goals.length+' 달성':'';
- items.filter(t=>!t.due&&!t.goal).forEach(t=>{if(t.g!==g){g=t.g;h+='<li class="grp">'+g+'</li>';}h+=li(t).replace('</label>',(t.gn?'<span class="gtag">→ '+escT(t.gn)+'</span>':'')+'</label>');});
- // upcoming dues (next 3 days) shown ahead of time, each row jumps to that day
- let hu=''; [1,2,3].forEach(off=>{const dk=iso(addDays(o.d,off)); if(dk>iso(END)) return; const dd=peek(dk); (dd.due||[]).forEach(x=>{const dn=!!(dd.done||{})['d_'+x.id]; hu+='<li class="up'+(dn?' done':'')+'"><input type="checkbox" id="u_'+dk+'_'+x.id+'" data-dk="'+dk+'" data-id="d_'+x.id+'" '+(dn?'checked':'')+(state.canWrite?'':' disabled')+' title="미리 끝냈으면 체크"><button type="button" class="jump" data-jump="'+dk+'">'+(off===1?'내일':off===2?'모레':'3일 뒤')+' ('+(fromIso(dk).getMonth()+1)+'/'+fromIso(dk).getDate()+') 마감</button><span class="upl">'+escT(x.l)+(dn?' · 완료':'')+'</span></li>';});});
- document.getElementById('due').innerHTML=(hd||'<li class="empty">오늘 제출할 과제가 없으면 비워 둔다. 플래너에 적힌 마감을 여기로 옮겨 적을 것.</li>')+(hu?'<li class="grp upg">다가오는 마감</li>'+hu:'');
- document.getElementById('duecnt').textContent=dues.length?'· '+dues.filter(t=>(r.done||{})[t.id]).length+'/'+dues.length+' 제출':'';
+ items.filter(t=>!t.due&&!t.goal).forEach(t=>{if(t.g!==g){g=t.g;h+='<li class="grp">'+g+'</li>';}h+=li(t).replace('</label>',(t.gn?'<span class="gtag">→ '+escT(t.gn)+'</span>':'')+(t.xn?'<span class="xtag">→ '+escT(t.xn)+'</span>':'')+'</label>');});
  todoEl.innerHTML=h;
  if(editing){const e=document.getElementById('e_c_'+k+'_'+editing);if(e){e.focus();e.select();}}
  ['addin','addbtn','duein','duebtn','goalin','goalbtn'].forEach(i=>document.getElementById(i).disabled=!state.canWrite);
@@ -580,20 +771,22 @@ function savePlan(){
  if(e<=s||s<G0||e>G1){if(err)err.textContent='6:00–24:00 사이, 끝이 시작보다 뒤여야 함';return;}
  const v=l.trim(); const r=rec(k); r.plans=r.plans.slice();
  if(!v){if(err)err.textContent='할 일을 적어 주세요';return;}
- const g=(document.getElementById('pg')||{}).value||editor.g||'';
- if(editor.id){r.plans=r.plans.map(p=>p.id===editor.id?{id:p.id,s,e,l:v,g}:p);}
- else r.plans.push({id:'p'+Date.now().toString(36),s,e,l:v,g});
+ const sel=document.getElementById('plink'); const lv=sel?sel.value:linkValue(editor);
+ const ty=editor.type==='rest'?'rest':'study';
+ if(editor.id){r.plans=r.plans.map(p=>p.id===editor.id?applyLink({id:p.id,s,e,l:v,type:ty},ty==='rest'?'':lv):p);}
+ else r.plans.push(applyLink({id:'p'+Date.now().toString(36),s,e,l:v,type:ty},ty==='rest'?'':lv));
  editor=null; saveDay(k); render();
 }
 function delPlan(id){const k=state.sel,r=rec(k);r.plans=r.plans.filter(p=>p.id!==id);r.done=Object.assign({},r.done);delete r.done['p_'+id];editor=null;saveDay(k);render();}
 colEl.addEventListener('click',e=>{
  const b=e.target.closest('button'); const k=state.sel;
  if(b&&b.dataset.slot!=null){const s=+b.dataset.slot;const o=buildDay(k);const sg=o.sugg.find(x=>x.s<=s&&x.e>s);const occ=[...o.fixed,...o.plans];const lim=Math.min(G1,...occ.filter(x=>x.s>s).map(x=>x.s));const dflt=sg?Math.min(sg.e,lim):Math.min(s+60,lim);editor={s,e:dflt,l:sg?sg.l:''};editing=null;render();return;}
+ if(b&&b.dataset.ptype&&editor){editor.l=(document.getElementById('pl')||{}).value||editor.l;const ps=document.getElementById('ps'),pe=document.getElementById('pe');const s2=ps?parseClock(ps.value):null,e2=pe?parseClock(pe.value):null;if(s2!=null)editor.s=s2;if(e2!=null)editor.e=e2;editor.type=b.dataset.ptype;render();return;}
  if(b&&b.dataset.hide){const r=rec(k);r.tlhide=Object.assign({},r.tlhide,{[b.dataset.hide]:true});saveDay(k);render();return;}
  if(b&&b.dataset.pdel){delPlan(b.dataset.pdel);return;}
  if(b&&b.dataset.psave){savePlan();return;}
  if(b&&b.dataset.pcancel){editor=null;render();return;}
- const pb=e.target.closest('[data-plan]'); if(pb&&!e.target.closest('.editor')&&state.canWrite){const p=peek(k).plans.find(x=>x.id===pb.dataset.plan);if(p){editor={id:p.id,s:p.s,e:p.e,l:p.l,g:p.g||''};render();}return;}
+ const pb=e.target.closest('[data-plan]'); if(pb&&!e.target.closest('.editor')&&state.canWrite){const p=peek(k).plans.find(x=>x.id===pb.dataset.plan);if(p){editor={id:p.id,s:p.s,e:p.e,l:p.l,g:p.g||'',hw:p.hw,ex:p.ex,xq:p.xq,type:p.type||'study'};render();}return;}
  // click on bare grid background (any gap, however small) → new plan at that time, 5-minute precision
  if(state.canWrite&&(e.target===colEl||e.target.classList.contains('hl'))){
   const rect=colEl.getBoundingClientRect(); let s=G0+Math.floor(((e.clientY-rect.top)/ROW*STEP)/5)*5; s=Math.max(G0,Math.min(G1-5,s));
@@ -611,6 +804,7 @@ function parseClock(t){
  if(ap==='pm'||ap==='오후'){if(h<12)h+=12;} else if(ap==='am'||ap==='오전'){if(h===12)h=0;} else if(h<6){h+=12;}
  return h*60+mm;
 }
+colEl.addEventListener('change',e=>{if(e.target.id!=='plink')return;const pl=document.getElementById('pl');if(!pl||pl.value.trim())return;const o=linkOptions(state.sel,peek(state.sel)).find(x=>x.v===e.target.value);if(o)pl.value=o.l;});
 colEl.addEventListener('keydown',e=>{if(e.target.id==='pl'||e.target.id==='pe'||e.target.id==='ps'){if(e.key==='Enter'){e.preventDefault();savePlan();}if(e.key==='Escape'){editor=null;render();}}else if(e.key==='Enter'&&e.target.dataset.plan){e.target.click();}});
 // weekly goal boxes
 const wkEl=document.getElementById('weeks');
@@ -623,13 +817,21 @@ wkEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.ty
 wkEl.addEventListener('change',e=>{const id=e.target.dataset.wg;if(!id)return;const i=e.target.dataset.wk;setWeekGoals(i,weekGoals(i).map(g=>g.id===id?Object.assign({},g,{done:e.target.checked}):g));});
 wkEl.addEventListener('submit',e=>{e.preventDefault();const f=e.target.closest('form.wkadd');if(!f)return;const inp=f.querySelector('input');const v=inp.value.trim();if(!v)return;const i=f.dataset.wk;setWeekGoals(i,[...weekGoals(i),{id:'w'+Date.now().toString(36),l:v,done:false}]);const nf=wkEl.querySelector('form.wkadd[data-wk="'+i+'"] input');if(nf)nf.focus();});
 wkEl.addEventListener('keydown',e=>{if(!e.target.dataset.wgedit)return;if(e.key==='Enter'){e.preventDefault();wkEl.querySelector('[data-wgsave="'+e.target.dataset.wgedit+'"]').click();}if(e.key==='Escape'){editing=null;render();}});
+function setView(v){state.view=v;try{localStorage.setItem('gieun-plan-view',v);}catch(e){}render();}
+document.querySelectorAll('.addtog').forEach(b=>b.addEventListener('click',()=>{const w=document.getElementById(b.dataset.tog);w.hidden=!w.hidden;b.setAttribute('aria-expanded',!w.hidden);b.textContent=w.hidden?'＋ 추가':'닫기';if(!w.hidden)w.querySelector('input[type=text]').focus();}));
+document.getElementById('vAll').addEventListener('click',()=>setView('all'));
+document.getElementById('vWeek').addEventListener('click',()=>setView('week'));
+function shiftWeek(n){let d=addDays(fromIso(state.sel),7*n);if(d<START)d=new Date(START);if(d>END)d=new Date(END);editing=null;editor=null;state.sel=iso(d);render();}
+document.getElementById('wPrev').addEventListener('click',()=>shiftWeek(-1));
+document.getElementById('wNext').addEventListener('click',()=>shiftWeek(1));
 document.getElementById('restoreBtn').addEventListener('click',()=>{const r=rec(state.sel);r.tlhide={};saveDay(state.sel);render();});
 
 // ---------- events: checklist ----------
-todoEl.addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;const k=state.sel;const r=rec(k);r.done=Object.assign({},r.done);if(e.target.checked)r.done[id]=true;else delete r.done[id];saveDay(k);render();});
+function syncPrepFromPlan(k,planId,on){const p=(peek(k).plans||[]).find(x=>x.id===planId);if(!p||!p.ex)return;const rd=rec(p.ex.d);rd.due=rd.due.map(y=>y.id===p.ex.q?Object.assign({},y,{prep:(y.prep||[]).map(z=>z.id===p.ex.p?Object.assign({},z,{done:on}):z)}):y);if(p.ex.d!==k)saveDay(p.ex.d);}
+todoEl.addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;const k=state.sel;const r=rec(k);r.done=Object.assign({},r.done);if(e.target.checked)r.done[id]=true;else delete r.done[id];if(id.startsWith('p_'))syncPrepFromPlan(k,id.slice(2),e.target.checked);saveDay(k);render();});
 function commitEdit(){const k=state.sel,id=editing;if(!id)return;const inp=todoEl.querySelector('[data-edit="'+id+'"]');const v=inp?inp.value.trim():'';editing=null;if(!v){render();return;}const r=rec(k);
  if(id.startsWith('p_')){r.plans=r.plans.map(p=>'p_'+p.id===id?Object.assign({},p,{l:v}):p);}
- else if(id.startsWith('d_')){r.due=r.due.map(x=>'d_'+x.id===id?{id:x.id,l:v}:x);}
+ else if(id.startsWith('d_')){r.due=r.due.map(x=>'d_'+x.id===id?Object.assign({},x,{l:v}):x);}
  else if(id.startsWith('g_')){r.goals=r.goals.map(x=>'g_'+x.id===id?{id:x.id,l:v}:x);}
  else if(r.extra.some(x=>x.id===id)){r.extra=r.extra.map(y=>y.id===id?{id,l:v}:y);}
  else{r.edited=Object.assign({},r.edited,{[id]:v});}
@@ -657,19 +859,89 @@ function parseQuick(v){
 }
 document.getElementById('addf').addEventListener('submit',e=>{e.preventDefault();const inp=document.getElementById('addin');const v=inp.value.trim();if(!v)return;const k=state.sel,r=rec(k);
  const q=parseQuick(v);
- if(q){r.plans=[...r.plans,{id:'p'+Date.now().toString(36),s:q.s,e:q.e,l:q.l}];}
+ if(q){const rm=q.l.match(/^(여가|휴식|rest)\s*[:：]?\s*/i);r.plans=[...r.plans,{id:'p'+Date.now().toString(36),s:q.s,e:q.e,l:rm?(q.l.slice(rm[0].length)||q.l):q.l,type:rm?'rest':'study'}];}
  else r.extra=[...r.extra,{id:'x'+Date.now().toString(36),l:v}];
  inp.value='';saveDay(k);render();inp.focus();});
-const dueEl=document.getElementById('due');
+function bindDueList(dueEl){
 dueEl.addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;const k=e.target.dataset.dk||state.sel;const r=rec(k);r.done=Object.assign({},r.done);if(e.target.checked)r.done[id]=true;else delete r.done[id];saveDay(k);render();});
 dueEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=state.sel;
  if(b.dataset.jump){editing=null;editor=null;state.sel=b.dataset.jump;render();document.getElementById('detail').scrollIntoView({block:'start',behavior:'smooth'});}
+ else if(b.dataset.hsched){schedFor={key:'hw:'+b.dataset.hsched,d:state.sel};editing=null;render();const i=document.getElementById('ss');if(i)i.focus();}
+ else if(b.dataset.scancel){schedFor=null;render();}
+ else if(b.dataset.hsave){const [hd,hid]=b.dataset.hsave.split('|');const dv=document.getElementById('sd').value.trim(),sv=document.getElementById('ss').value,ev=document.getElementById('se').value;const err=document.getElementById('serr');
+  const m=dv.match(/^(\d{1,2})[\/\-.](\d{1,2})$/);const dk=m?iso(new Date(2026,+m[1]-1,+m[2])):null;const s=parseClock(sv),en=parseClock(ev);
+  if(!dk||dk<iso(START)||dk>iso(END)){err.textContent='날짜는 10/28 형식 (10/22–11/20)';return;}
+  if(s==null||en==null||en<=s||s<G0||en>G1){err.textContent='시간은 16:00 / 4pm 형식, 끝이 시작보다 뒤';return;}
+  const x=(peek(hd).due||[]).find(y=>y.id===hid);if(!x)return;
+  const rd=rec(dk);rd.plans=[...rd.plans,{id:'p'+Date.now().toString(36),s,e:en,l:hwTitle(x),g:'',hw:{d:hd,id:hid}}];schedFor=null;saveDay(dk);render();}
  else if(b.dataset.ed){editing=b.dataset.ed;editor=null;render();}
- else if(b.dataset.save){const id=editing;const inp=dueEl.querySelector('[data-edit="'+id+'"]');const v=inp?inp.value.trim():'';editing=null;if(v){const r=rec(k);r.due=r.due.map(x=>'d_'+x.id===id?{id:x.id,l:v}:x);saveDay(k);}render();}
+ else if(b.dataset.save){const id=editing;const inp=dueEl.querySelector('[data-edit="'+id+'"]');const v=inp?inp.value:'';const di=dueEl.querySelector('[data-dedit="'+id+'"]');const nd=di?parseMD(di.value):k;if(di&&!nd){di.style.borderColor='var(--exam)';di.title='날짜는 10/28 형식 (10/22–11/20)';return;}editing=null;const r=rec(k);r.due=r.due.map(x=>'d_'+x.id===id?Object.assign({},x,{l:v.trim()}):x);saveDay(k);if(nd!==k)moveDue(k,id.slice(2),nd);render();}
  else if(b.dataset.cancel){editing=null;render();}
  else if(b.dataset.del){const id=b.dataset.del,r=rec(k);r.due=r.due.filter(x=>'d_'+x.id!==id);r.done=Object.assign({},r.done);delete r.done[id];saveDay(k);render();}
 });
-dueEl.addEventListener('keydown',e=>{if(!e.target.dataset.edit)return;if(e.key==='Enter'){e.preventDefault();dueEl.querySelector('[data-save]').click();}if(e.key==='Escape'){editing=null;render();}});
+dueEl.addEventListener('keydown',e=>{if(e.target.closest('.sched')){if(e.key==='Enter'){e.preventDefault();const sb=dueEl.querySelector('[data-hsave]');if(sb)sb.click();}if(e.key==='Escape'){schedFor=null;render();}return;}if(!e.target.dataset.edit)return;if(e.key==='Enter'){e.preventDefault();dueEl.querySelector('[data-save]').click();}if(e.key==='Escape'){editing=null;render();}});
+}
+bindDueList(document.getElementById('due'));
+// due quick add: optional leading date "11/4 화학 랩 리포트" or "11-04 …" files it on that day; otherwise on the selected day
+function parseDue(v){const m=v.match(/^(\d{1,2})[\/\-.](\d{1,2})\.?\s+(.+)$/);if(!m)return null;const mo=+m[1],da=+m[2];if(mo<1||mo>12||da<1||da>31)return null;const k=iso(new Date(2026,mo-1,da));if(k<iso(START)||k>iso(END))return null;return {k,l:m[3].trim()};}
+let dSubj='',dKind='hw';
+document.getElementById('dchips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.subj!=null){dSubj=dSubj===b.dataset.subj?'':b.dataset.subj;}else if(b.dataset.ekind){dKind=b.dataset.ekind;}
+ document.querySelectorAll('#dchips button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.subj!=null?x.dataset.subj===dSubj:x.dataset.ekind===dKind));document.getElementById('duein').focus();});
+// exam prep panel
+const exEl=document.getElementById('exams');
+function prepRef(pid){const [d,q,p]=pid.split('|');const r=rec(d);const x=r.due.find(y=>y.id===q);return {d,q,p,r,x};}
+function savePrep(pid,fn){const o=prepRef(pid);if(!o.x)return;o.r.due=o.r.due.map(y=>y.id===o.q?Object.assign({},y,{prep:fn((y.prep||[]).slice())}):y);saveDay(o.d);render();}
+function bindCards(exEl){
+exEl.addEventListener('click',e=>{
+ const hd=e.target.closest('.exhead'); const b=e.target.closest('button');
+ if(hd&&!b){const key=hd.dataset.ex;const off=[...upcomingDue(state.sel,'quiz'),...upcomingDue(state.sel,'hw')].find(u=>u.dk+'|'+u.x.id===key);openEx[key]=!(openEx[key]!=null?openEx[key]:(off&&off.off<=7));render();return;}
+ if(!b)return;
+ if(b.dataset.dchg){dateEdit=dateEdit===b.dataset.dchg?null:b.dataset.dchg;render();const i=document.getElementById('nd');if(i){i.focus();i.select();}}
+ else if(b.dataset.dcancel){dateEdit=null;render();}
+ else if(b.dataset.dsave){const [od,id]=b.dataset.dsave.split('|');const nd=parseMD(document.getElementById('nd').value);if(!nd){document.getElementById('nderr').textContent='날짜는 10/28 형식 (10/22–11/20)';return;}dateEdit=null;moveDue(od,id,nd);render();}
+ else if(b.dataset.psched){schedFor={key:b.dataset.psched,d:state.sel};editing=null;render();}
+ else if(b.dataset.scancel){schedFor=null;render();}
+ else if(b.dataset.ssave){const pid=b.dataset.ssave;const dv=document.getElementById('sd').value.trim(),sv=document.getElementById('ss').value,ev=document.getElementById('se').value;const err=document.getElementById('serr');
+  const m=dv.match(/^(\d{1,2})[\/\-.](\d{1,2})$/);const dk=m?iso(new Date(2026,+m[1]-1,+m[2])):null;const s=parseClock(sv),en=parseClock(ev);
+  if(!dk||dk<iso(START)||dk>iso(END)){err.textContent='날짜는 10/28 형식 (10/22–11/20)';return;}
+  if(s==null||en==null||en<=s||s<G0||en>G1){err.textContent='시간은 16:00 / 4pm 형식, 끝이 시작보다 뒤';return;}
+  const o=prepRef(pid);const z=(o.x&&o.x.prep||[]).find(y=>y.id===o.p);if(!z)return;
+  const rd=rec(dk);rd.plans=[...rd.plans,{id:'p'+Date.now().toString(36),s,e:en,l:z.l,g:'',ex:{d:o.d,q:o.q,p:o.p}}];
+  schedFor=null;saveDay(dk);render();}
+ else if(b.dataset.ped){editing='prep:'+b.dataset.ped;schedFor=null;render();}
+ else if(b.dataset.plrm){const [dk,pl]=b.dataset.plrm.split('|');const rd=rec(dk);rd.plans=rd.plans.filter(x=>x.id!==pl);rd.done=Object.assign({},rd.done);delete rd.done['p_'+pl];saveDay(dk);render();}
+ else if(b.dataset.psv){const pid=b.dataset.psv;const inp=exEl.querySelector('[data-pedit="'+pid+'"]');const v=inp?inp.value.trim():'';
+  const rows=[...exEl.querySelectorAll('.plrow[data-pl]')];const err=document.getElementById('plerr');const upd=[];
+  for(const row of rows){const [dk,pl]=row.dataset.pl.split('|');const dv=row.querySelector('[data-f="d"]').value.trim();const m=dv.match(/^(\d{1,2})[\/\-.](\d{1,2})$/);const nk=m?iso(new Date(2026,+m[1]-1,+m[2])):null;const ns=parseClock(row.querySelector('[data-f="s"]').value),ne=parseClock(row.querySelector('[data-f="e"]').value);
+   if(!nk||nk<iso(START)||nk>iso(END)||ns==null||ne==null||ne<=ns||ns<G0||ne>G1){if(err)err.textContent='시간 형식 확인: 날짜 10/28, 시간 16:00 / 4pm, 끝이 시작보다 뒤';return;}
+   upd.push({dk,pl,nk,ns,ne});}
+  editing=null; if(!v){render();return;}
+  const o=prepRef(pid); const touched=new Set();
+  upd.forEach(u=>{const rd=rec(u.dk);const pobj=rd.plans.find(x=>x.id===u.pl);if(!pobj)return;const np=Object.assign({},pobj,{s:u.ns,e:u.ne,l:v});
+   if(u.nk===u.dk){rd.plans=rd.plans.map(x=>x.id===u.pl?np:x);touched.add(u.dk);}else{rd.plans=rd.plans.filter(x=>x.id!==u.pl);const dn=!!rd.done['p_'+u.pl];rd.done=Object.assign({},rd.done);delete rd.done['p_'+u.pl];const r2=rec(u.nk);r2.plans=[...r2.plans,np];if(dn){r2.done=Object.assign({},r2.done,{['p_'+u.pl]:true});}touched.add(u.dk);touched.add(u.nk);}});
+  touched.forEach(dk=>{if(dk!==o.d)saveDay(dk);});
+  savePrep(pid,arr=>arr.map(z=>z.id===o.p?Object.assign({},z,{l:v}):z));}
+ else if(b.dataset.pcancel){editing=null;render();}
+ else if(b.dataset.pdel2){const pid=b.dataset.pdel2;const o=prepRef(pid);savePrep(pid,arr=>arr.filter(z=>z.id!==o.p));}
+});
+exEl.addEventListener('change',e=>{const pid=e.target.dataset.pchk;if(!pid)return;const o=prepRef(pid);const on=e.target.checked;savePrep(pid,arr=>arr.map(z=>z.id===o.p?Object.assign({},z,{done:on}):z));});
+exEl.addEventListener('submit',e=>{e.preventDefault();const f=e.target.closest('form[data-pform]');if(!f)return;const inp=f.querySelector('input');const v=inp.value.trim();if(!v)return;const [d,q]=f.dataset.pform.split('|');
+ const r=rec(d);r.due=r.due.map(y=>y.id===q?Object.assign({},y,{prep:[...(y.prep||[]),{id:'z'+Date.now().toString(36),l:v,done:false}]}):y);openEx[f.dataset.pform]=true;saveDay(d);render();
+ const nf=exEl.querySelector('form[data-pform="'+f.dataset.pform+'"] input');if(nf)nf.focus();});
+exEl.addEventListener('keydown',e=>{if(e.target.closest('.plrow')&&e.key==='Enter'){e.preventDefault();const sb=exEl.querySelector('[data-psv]');if(sb)sb.click();return;}if(e.target.dataset.pedit){if(e.key==='Enter'){e.preventDefault();exEl.querySelector('[data-psv="'+e.target.dataset.pedit+'"]').click();}if(e.key==='Escape'){editing=null;render();}}
+ else if(e.target.id==='nd'){if(e.key==='Enter'){e.preventDefault();exEl.querySelector('[data-dsave]').click();}if(e.key==='Escape'){dateEdit=null;render();}}
+ else if(e.target.closest('.sched')){if(e.key==='Enter'){e.preventDefault();const sb=exEl.querySelector('[data-ssave]');if(sb)sb.click();}if(e.key==='Escape'){schedFor=null;render();}}});
+}
+bindCards(exEl);
+document.getElementById('duef').addEventListener('submit',e=>{e.preventDefault();const inp=document.getElementById('duein');const v=inp.value.trim();if(!v)return;
+ const q=parseDue(v); const k=q?q.k:state.sel; const r=rec(k); let l=q?q.l:v; let kind=dKind;
+ const pm=l.match(/^(퀴즈|quiz)\s*[:：]?\s*/i); if(pm){kind='quiz';l=l.slice(pm[0].length)||l;}
+ const pt=l.match(/^(시험|test|exam)\s*[:：]?\s*/i); if(pt){kind='test';l=l.slice(pt[0].length)||l;}
+ const pc=l.match(/^(conf|conference|컨퍼런스|면담)\s*[:：]?\s*/i); if(pc){kind='conf';l=l.slice(pc[0].length)||l;}
+ const item={id:'u'+Date.now().toString(36),l,subj:dSubj,prep:[]}; if(kind==='hw'){item.t='hw';}else if(kind==='conf'){item.t='conf';}else{item.t='quiz';item.kind=kind;}
+ r.due=[...r.due,item];inp.value='';saveDay(k);render();
+ if(q&&q.k!==state.sel){document.getElementById('duecnt').textContent=(fromIso(q.k).getMonth()+1)+'/'+fromIso(q.k).getDate()+'에 추가됨';} inp.focus();});
 // goals box: same handlers as due box, plus "+ 시간 계획" → open the grid editor at the first free hour, linked to the goal
 const goalEl=document.getElementById('goals');
 goalEl.addEventListener('change',e=>{const id=e.target.dataset.id;if(!id)return;const k=state.sel;const r=rec(k);r.done=Object.assign({},r.done);if(e.target.checked)r.done[id]=true;else delete r.done[id];saveDay(k);render();});
@@ -688,12 +960,6 @@ goalEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)ret
 });
 goalEl.addEventListener('keydown',e=>{if(!e.target.dataset.edit)return;if(e.key==='Enter'){e.preventDefault();goalEl.querySelector('[data-save]').click();}if(e.key==='Escape'){editing=null;render();}});
 document.getElementById('goalf').addEventListener('submit',e=>{e.preventDefault();const inp=document.getElementById('goalin');const v=inp.value.trim();if(!v)return;const k=state.sel,r=rec(k);r.goals=[...r.goals,{id:'g'+Date.now().toString(36),l:v}];inp.value='';saveDay(k);render();inp.focus();});
-// due quick add: optional leading date "11/4 화학 랩 리포트" or "11-04 …" files it on that day; otherwise on the selected day
-function parseDue(v){const m=v.match(/^(\d{1,2})[\/\-.](\d{1,2})\.?\s+(.+)$/);if(!m)return null;const mo=+m[1],da=+m[2];if(mo<1||mo>12||da<1||da>31)return null;const k=iso(new Date(2026,mo-1,da));if(k<iso(START)||k>iso(END))return null;return {k,l:m[3].trim()};}
-document.getElementById('duef').addEventListener('submit',e=>{e.preventDefault();const inp=document.getElementById('duein');const v=inp.value.trim();if(!v)return;
- const q=parseDue(v); const k=q?q.k:state.sel; const r=rec(k);
- r.due=[...r.due,{id:'u'+Date.now().toString(36),l:q?q.l:v}];inp.value='';saveDay(k);render();
- document.getElementById('notestat').textContent=''; if(q&&q.k!==state.sel){const s=document.getElementById('duecnt');s.textContent=(fromIso(q.k).getMonth()+1)+'/'+fromIso(q.k).getDate()+'에 추가됨';} inp.focus();});
 let nt; noteEl.addEventListener('input',()=>{const k=state.sel;rec(k).note=noteEl.value;document.getElementById('notestat').textContent='입력 중…';clearTimeout(nt);nt=setTimeout(()=>{saveDay(k);document.getElementById('notestat').textContent='저장됨';},800);});
 document.getElementById('prev').addEventListener('click',()=>{editing=null;editor=null;state.sel=iso(addDays(fromIso(state.sel),-1));render();});
 document.getElementById('next').addEventListener('click',()=>{editing=null;editor=null;state.sel=iso(addDays(fromIso(state.sel),1));render();});
@@ -736,9 +1002,12 @@ render();
  let ok=false; try{ok=localStorage.getItem('gieun-plan-gate')===pw;}catch(e){}
  if(ok) return;
  const g=document.getElementById('gate'); g.hidden=false;
- document.getElementById('gatef').addEventListener('submit',e=>{e.preventDefault();const v=document.getElementById('gatein').value;
+ const tryOpen=()=>{const v=document.getElementById('gatein').value;
   if(v===pw){try{localStorage.setItem('gieun-plan-gate',pw);}catch(x){} g.hidden=true;}
-  else document.getElementById('gateerr').textContent='비밀번호가 다릅니다';});
+  else document.getElementById('gateerr').textContent='비밀번호가 다릅니다';};
+ document.getElementById('gatef').addEventListener('submit',e=>{e.preventDefault();tryOpen();});
+ document.querySelector('#gatef button').addEventListener('click',e=>{e.preventDefault();tryOpen();});
+ document.getElementById('gatein').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tryOpen();}});
  document.getElementById('gatein').focus();
 })();
 </script>
